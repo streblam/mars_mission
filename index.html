@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marsa ceļojuma pieteikums</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <img class="hero-image" src="mars-banner.png" alt="Marsa ainava saullēktā">
+      <div class="hero-copy">
+        <p class="eyebrow">Vienvirziena ceļojums</p>
+        <h1>Marsa ceļojuma pieteikums</h1>
+        <p class="intro">Aizpildi pieteikumu un izvēlies savu lidojuma komplektāciju.</p>
+      </div>
+    </header>
+
+    <section class="form-card" aria-label="Ceļojuma pieteikuma forma">
+      <form id="mars-form" action="/mission-applications" method="get">
+        <fieldset>
+          <legend>Ceļotāja informācija</legend>
+
+          <label for="traveler-name">Vārds un uzvārds</label>
+          <input type="text" id="traveler-name" name="traveler_name" required>
+
+          <label for="traveler-email">E-pasts</label>
+          <input type="email" id="traveler-email" name="traveler_email" required>
+
+          <div class="measurements">
+            <div>
+              <label for="height">Augums (cm)</label>
+              <input type="number" id="height" name="height_cm" min="149" max="193" step="1" required aria-describedby="fit-limits">
+            </div>
+            <div>
+              <label for="weight">Svars (kg)</label>
+              <input type="number" id="weight" name="weight_kg" min="45" max="120" step="0.5" required aria-describedby="fit-limits">
+            </div>
+          </div>
+
+          <p class="field-hint" id="fit-limits">
+            Kuģa sēdekļa un ekipējuma saderības robežas: 149–193 cm un 45–120 kg.
+            Šīs ir projekta prasības, nevis medicīnisks vērtējums.
+          </p>
+
+          <label for="launch-date">Izlidošanas datums</label>
+          <input type="date" id="launch-date" name="launch_date" required>
+        </fieldset>
+
+        <fieldset>
+          <legend>Lidojuma izvēle</legend>
+
+          <label for="ship">Kosmosa kuģis</label>
+          <select id="ship" name="ship" required>
+            <option value="" selected disabled>Izvēlies kuģi</option>
+            <option value="pioneer">Pioneer</option>
+            <option value="odyssey">Odyssey</option>
+            <option value="horizon">Horizon</option>
+          </select>
+
+          <label for="travelers">Ceļotāju skaits</label>
+          <input type="number" id="travelers" name="travelers" min="1" max="6" value="1">
+
+          <span class="field-label">Kabīnes klase</span>
+          <label class="option" for="cabin-standard">
+            <input type="radio" id="cabin-standard" name="cabin_class" value="standard" required>
+            Standarta
+          </label>
+          <label class="option" for="cabin-colonist">
+            <input type="radio" id="cabin-colonist" name="cabin_class" value="colonist">
+            Kolonista
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ekipējums un papildu informācija</legend>
+
+          <span class="field-label">Papildu ekipējums</span>
+          <label class="option" for="oxygen">
+            <input type="checkbox" id="oxygen" name="equipment" value="oxygen">
+            Skābekļa rezerve
+          </label>
+          <label class="option" for="thermal-suit">
+            <input type="checkbox" id="thermal-suit" name="equipment" value="thermal-suit">
+            Siltuma tērps
+          </label>
+
+          <label for="readiness">Gatavība piedzīvojumam</label>
+          <input type="range" id="readiness" name="readiness" min="1" max="10" value="5">
+
+          <label for="suit-color">Tērpa krāsa</label>
+          <input type="color" id="suit-color" name="suit_color" value="#ff784f">
+
+          <label for="medical-file">Medicīniskā izziņa</label>
+          <input type="file" id="medical-file" name="medical_file" accept=".pdf,.jpg,.png">
+          <p class="field-hint">Faila pievienošana nav obligāta.</p>
+
+          <label for="notes">Piezīmes</label>
+          <textarea id="notes" name="notes" rows="4"></textarea>
+        </fieldset>
+
+        <div class="buttons">
+          <button type="submit" name="action" value="preview" formmethod="get" formaction="?action=preview">
+            Priekšskatīt pieteikumu
+          </button>
+          <button type="submit" name="action" value="medical-review" formmethod="post" formaction="/mission-applications/medical-review">
+            Iesniegt medicīniskajai pārbaudei
+          </button>
+        </div>
+      </form>
+
+      <div class="outside-field">
+        <label for="referral-code">Ieteikuma kods</label>
+        <input type="text" id="referral-code" name="referral_code" form="mars-form">
+      </div>
+    </section>
+
+    <section class="ticket" id="boarding-pass" aria-live="polite" hidden>
+      <div class="ticket-main">
+        <p class="eyebrow">MARSS / 01 · CEĻOJUMA BIĻETE</p>
+        <h2>Gatavs izlidošanai</h2>
+        <p class="ticket-route">ZEME <span>→</span> MARSS</p>
+        <dl class="ticket-details">
+          <div><dt>Pasažieris</dt><dd id="ticket-name">—</dd></div>
+          <div><dt>Izlidošana</dt><dd id="ticket-date">—</dd></div>
+          <div><dt>Kuģis</dt><dd id="ticket-ship">—</dd></div>
+          <div><dt>Ceļotāji</dt><dd id="ticket-travelers">—</dd></div>
+          <div><dt>Kabīne</dt><dd id="ticket-cabin">—</dd></div>
+          <div><dt>Augums / svars</dt><dd id="ticket-size">—</dd></div>
+        </dl>
+      </div>
+      <aside class="ticket-stub">
+        <span class="stub-label">BIĻETES NR.</span>
+        <strong id="ticket-number">—</strong>
+        <span class="stub-destination">VIENĀ VIRZIENĀ</span>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
